@@ -27,7 +27,12 @@ h1 { margin: 0; font-size: clamp(28px, 5vw, 42px); line-height: 1.08; letter-spa
 .message-meta { font-size: 12px; margin-bottom: 5px; opacity: .7; font-weight: 600; }
 .message-files { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
 .file-tag { display: inline-flex; align-items: center; gap: 5px; max-width: 220px; padding: 4px 7px; border-radius: 6px; background: #ffffff1c; font: 12px "DM Mono", monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.composer { margin-top: auto; border: 1px solid #d8dfd9; border-radius: 16px; padding: 10px 11px 11px; background: #fff; box-shadow: 0 12px 36px #213c3410; }
+.composer { position: relative; margin-top: auto; border: 1px solid #d8dfd9; border-radius: 16px; padding: 10px 11px 11px; background: #fff; box-shadow: 0 12px 36px #213c3410; transition: border-color .16s ease, box-shadow .16s ease, background .16s ease; }
+.composer.is-dragging { border-color: #2e7a66; background: #f4fbf6; box-shadow: 0 0 0 4px #84c6a433, 0 12px 36px #213c3410; }
+.drop-overlay { position: absolute; inset: 0; z-index: 2; display: none; align-items: center; justify-content: center; gap: 9px; border-radius: inherit; color: #205c4d; font-size: 14px; font-weight: 700; pointer-events: none; }
+.composer.is-dragging .drop-overlay { display: flex; }
+.composer.is-dragging > :not(.drop-overlay) { opacity: .22; }
+.drop-icon { width: 26px; height: 26px; display: grid; place-items: center; border-radius: 50%; background: #d8f1df; font-size: 19px; line-height: 1; }
 .message-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 textarea { display: block; width: 100%; resize: none; min-height: 52px; max-height: 180px; border: 0; outline: 0; color: #182228; padding: 7px 7px 8px; line-height: 1.45; background: transparent; }
 textarea::placeholder { color: #899491; }

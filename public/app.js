@@ -5,9 +5,13 @@ const filesInput = document.querySelector("#files");
 const attachments = document.querySelector("#attachments");
 const sendButton = document.querySelector("#send-button");
 const clearButton = document.querySelector("#clear-button");
+const supportedExtensions = new Set(
+  filesInput.accept.split(",").map((extension) => extension.trim().toLowerCase()),
+);
 
 let selectedFiles = [];
 let history = [];
+let dragDepth = 0;
 
 function autoResize() {
   messageInput.style.height = "auto";
@@ -30,6 +34,32 @@ function renderAttachments() {
     });
     attachments.append(item);
   });
+}
+
+function addFiles(incoming) {
+  const files = Array.from(incoming || []);
+  const unsupported = files.filter((file) => {
+    const extension = `.${file.name.split(".").pop().toLowerCase()}`;
+    return !supportedExtensions.has(extension);
+  });
+  const combined = [...selectedFiles, ...files];
+  const totalSize = combined.reduce((sum, file) => sum + file.size, 0);
+
+  if (unsupported.length) {
+    addMessage("error", "That file type is not supported. Attach a PDF, document, spreadsheet, presentation, or supported text/code file.");
+    return;
+  }
+  if (combined.length > 5) {
+    addMessage("error", "You can attach up to 5 files at once.");
+    return;
+  }
+  if (totalSize > 50 * 1024 * 1024) {
+    addMessage("error", "Attached files must total 50 MB or less.");
+    return;
+  }
+
+  selectedFiles = combined;
+  renderAttachments();
 }
 
 function escapeHtml(value) {
@@ -74,14 +104,46 @@ messageInput.addEventListener("keydown", (event) => {
 });
 
 filesInput.addEventListener("change", () => {
-  const incoming = Array.from(filesInput.files || []);
-  const combined = [...selectedFiles, ...incoming];
-  const totalSize = combined.reduce((sum, file) => sum + file.size, 0);
-  if (combined.length > 5) return addMessage("error", "You can attach up to 5 files at once.");
-  if (totalSize > 50 * 1024 * 1024) return addMessage("error", "Attached files must total 50 MB or less.");
-  selectedFiles = combined;
+  addFiles(filesInput.files);
   filesInput.value = "";
-  renderAttachments();
+});
+
+form.addEventListener("dragenter", (event) => {
+  if (!event.dataTransfer?.types.includes("Files")) return;
+  event.preventDefault();
+  dragDepth += 1;
+  form.classList.add("is-dragging");
+});
+
+form.addEventListener("dragover", (event) => {
+  if (!event.dataTransfer?.types.includes("Files")) return;
+  event.preventDefault();
+  event.dataTransfer.dropEffect = "copy";
+});
+
+form.addEventListener("dragleave", (event) => {
+  if (!event.dataTransfer?.types.includes("Files")) return;
+  dragDepth -= 1;
+  if (dragDepth <= 0) {
+    dragDepth = 0;
+    form.classList.remove("is-dragging");
+  }
+});
+
+form.addEventListener("drop", (event) => {
+  if (!event.dataTransfer?.files?.length) return;
+  event.preventDefault();
+  dragDepth = 0;
+  form.classList.remove("is-dragging");
+  addFiles(event.dataTransfer.files);
+});
+
+window.addEventListener("dragover", (event) => {
+  if (event.dataTransfer?.types.includes("Files")) event.preventDefault();
+});
+
+window.addEventListener("drop", (event) => {
+  if (event.dataTransfer?.types.includes("Files")) event.preventDefault();
 });
 
 clearButton.addEventListener("click", () => {
