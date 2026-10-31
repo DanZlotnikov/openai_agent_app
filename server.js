@@ -87,12 +87,17 @@ app.post("/api/chat", upload.array("files", maxFiles), async (req, res) => {
 
   if (provider === "openai" && !process.env.OPENAI_API_KEY) return res.status(503).json({ error: "OPENAI_API_KEY is missing. Add it to your .env file, then restart the server." });
   if (provider === "anthropic" && !process.env.ANTHROPIC_API_KEY) return res.status(503).json({ error: "ANTHROPIC_API_KEY is missing. Add it to your .env file, then restart the server." });
+  if (!process.env.AICR_GATEWAY_KEY) return res.status(503).json({ error: "AICR_GATEWAY_KEY is missing. Add it to your .env file, then restart the server." });
 
   const uploadedFileIds = [];
   let openAIClient;
   try {
     if (provider === "anthropic") {
-      const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+      const client = new Anthropic({
+        apiKey: process.env.ANTHROPIC_API_KEY,
+        baseURL: "https://gateway.danzlotnikov.com/anthropic",
+        defaultHeaders: { "x-aicr-key": process.env.AICR_GATEWAY_KEY },
+      });
       const response = await client.messages.create({
         model,
         max_tokens: 2048,
@@ -105,7 +110,11 @@ app.post("/api/chat", upload.array("files", maxFiles), async (req, res) => {
       return res.json({ text, provider, model });
     }
 
-    openAIClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    openAIClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+      baseURL: "https://gateway.danzlotnikov.com/openai/v1",
+      defaultHeaders: { "x-aicr-key": process.env.AICR_GATEWAY_KEY },
+    });
     const fileParts = await Promise.all(files.map(async (file) => {
       const uploaded = await openAIClient.files.create({
         file: new File([file.buffer], file.originalname, { type: file.mimetype || "application/octet-stream" }),
