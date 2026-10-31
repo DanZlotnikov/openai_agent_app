@@ -9,6 +9,7 @@
     "check": "node --check server.js && node --check public/app.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.71.2",
     "dotenv": "^16.6.1",
     "express": "^5.1.0",
     "multer": "^2.0.2",

@@ -37,10 +37,13 @@ h1 { margin: 0; font-size: clamp(28px, 5vw, 42px); line-height: 1.08; letter-spa
 textarea { display: block; width: 100%; resize: none; min-height: 52px; max-height: 180px; border: 0; outline: 0; color: #182228; padding: 7px 7px 8px; line-height: 1.45; background: transparent; }
 textarea::placeholder { color: #899491; }
 .composer-footer { display: flex; align-items: center; gap: 10px; border-top: 1px solid #edf0ed; padding-top: 9px; }
+.model-picker { display: inline-flex; align-items: center; gap: 6px; color: #41635a; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.model-picker select { max-width: 158px; appearance: none; border: 1px solid #dbe4dd; border-radius: 7px; background: #f7faf7; color: #284b42; padding: 6px 24px 6px 8px; font: inherit; font-weight: 600; cursor: pointer; background-image: linear-gradient(45deg, transparent 50%, #41635a 50%), linear-gradient(135deg, #41635a 50%, transparent 50%); background-position: calc(100% - 12px) 50%, calc(100% - 8px) 50%; background-size: 4px 4px, 4px 4px; background-repeat: no-repeat; }
+.model-picker select:focus { outline: 2px solid #84c6a4; outline-offset: 1px; }
 .attach-button { display: inline-flex; align-items: center; gap: 5px; padding: 6px 7px; color: #41635a; font-size: 13px; font-weight: 600; cursor: pointer; border-radius: 7px; }
 .attach-button:hover { background: #eef3ef; }.attach-button span:first-of-type { font-size: 19px; line-height: 14px; font-weight: 400; }.attach-button input { display: none; }
 .file-hint { color: #88928f; font-size: 12px; margin-right: auto; }
 .send-button { display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 8px; background: #143d34; color: white; padding: 8px 12px; font-size: 13px; font-weight: 600; }.send-button:hover { background: #205244; }.send-button:disabled { opacity: .55; cursor: wait; }
 .attachments { display: flex; flex-wrap: wrap; gap: 7px; }.attachment { display: flex; align-items: center; gap: 5px; max-width: 260px; background: #edf4ef; border-radius: 7px; padding: 5px 6px 5px 8px; color: #38564e; font: 12px "DM Mono", monospace; }.attachment button { border: 0; padding: 0 2px; color: #38564e; background: transparent; font-size: 16px; line-height: 14px; }
 .footer-note { text-align: center; color: #87918e; margin: 12px 0 19px; font-size: 12px; }.footer-note code { font-family: "DM Mono", monospace; }
-@media (max-width: 560px) { .shell { width: min(100% - 22px, 820px); }.topbar { height: 64px; }.chat { padding-top: 22px; }.message { max-width: 92%; }.file-hint { display: none; }.empty-state { padding-bottom: 40px; } }
+@media (max-width: 560px) { .shell { width: min(100% - 22px, 820px); }.topbar { height: 64px; }.chat { padding-top: 22px; }.message { max-width: 92%; }.file-hint { display: none; }.model-picker span { display: none; }.model-picker select { max-width: 135px; }.empty-state { padding-bottom: 40px; } }

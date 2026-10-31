@@ -1,6 +1,6 @@
-# OpenAI File Chat
+# AI File Chat
 
-A tiny local chat app: type a prompt, optionally attach up to five files, and receive an OpenAI response in the chat.
+A tiny local chat app: choose an OpenAI or Claude model for each message, optionally attach up to five files, and receive the response in the chat.
 
 ## Run locally
 
@@ -16,6 +16,7 @@ A tiny local chat app: type a prompt, optionally attach up to five files, and re
    ```env
    OPENAI_API_KEY=your_key_here
    AICR_GATEWAY_KEY=your_gateway_key_here
+   ANTHROPIC_API_KEY=your_anthropic_key_here
    ```
 
 4. Start the app:
@@ -30,8 +31,8 @@ A tiny local chat app: type a prompt, optionally attach up to five files, and re
 
 ## Notes
 
-- The API key is read only by `server.js`; it is not exposed to the browser and `.env` is ignored by Git.
+- Provider keys are read only by `server.js`; they are not exposed to the browser and `.env` is ignored by Git.
 - The server routes requests through `https://gateway.danzlotnikov.com/openai/v1`; the AICR gateway key stays server-side in `.env`.
-- The app uses the OpenAI Responses API so it can accept supported document, spreadsheet, text/code, presentation, and PDF attachments. Each request supports up to five files totaling 50 MB.
-- Uploaded files are deleted from the OpenAI Files API after each response. Conversation text stays in this browser tab only.
-- Set `OPENAI_MODEL` in `.env` if you want to use a different model available to your project.
+- The model picker can switch between OpenAI and Claude per message. The conversation remains in the browser tab, so either provider can use the previous text turns as context.
+- OpenAI uses the Responses API and accepts supported documents, spreadsheets, presentations, PDFs, and text/code files. Claude accepts PDFs and text/code files; convert other document formats to PDF or text before selecting Claude.
+- OpenAI uploads are deleted after each response. Each request supports up to five files totaling 50 MB.

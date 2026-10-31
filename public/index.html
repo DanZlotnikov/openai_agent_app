@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="A simple local chat with OpenAI and optional file uploads." />
-    <title>OpenAI File Chat</title>
+    <meta name="description" content="A simple local chat with OpenAI, Claude, and optional file uploads." />
+    <title>AI File Chat</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono&display=swap" rel="stylesheet" />
@@ -13,9 +13,9 @@
   <body>
     <main class="shell">
       <header class="topbar">
-        <a class="brand" href="/" aria-label="OpenAI File Chat home">
+        <a class="brand" href="/" aria-label="AI File Chat home">
           <span class="brand-mark">✦</span>
-          <span>OpenAI File Chat</span>
+          <span>AI File Chat</span>
         </a>
         <button class="clear-button" id="clear-button" type="button">Clear chat</button>
       </header>
@@ -24,7 +24,7 @@
         <div class="empty-state" id="empty-state">
           <div class="sparkle">✦</div>
           <h1>Ask anything. Add a file if it helps.</h1>
-          <p>Your messages and optional attachments go directly to OpenAI from this local app.</p>
+          <p>Choose a model for each message, then add an attachment if it helps.</p>
         </div>
       </section>
 
@@ -37,6 +37,20 @@
         <label class="message-label" for="message">Message</label>
         <textarea id="message" name="message" placeholder="What would you like to know?" rows="1"></textarea>
         <div class="composer-footer">
+          <label class="model-picker" for="model">
+            <span>Model</span>
+            <select id="model" name="model">
+              <optgroup label="OpenAI">
+                <option value="openai|gpt-4.1-mini">GPT-4.1 mini</option>
+                <option value="openai|gpt-4.1">GPT-4.1</option>
+              </optgroup>
+              <optgroup label="Anthropic">
+                <option value="anthropic|claude-haiku-4-5-20251001">Claude Haiku 4.5</option>
+                <option value="anthropic|claude-sonnet-5">Claude Sonnet 5</option>
+                <option value="anthropic|claude-opus-5">Claude Opus 5</option>
+              </optgroup>
+            </select>
+          </label>
           <label class="attach-button" for="files" title="Add files">
             <input id="files" type="file" multiple accept=".art,.bat,.brf,.c,.cls,.css,.csv,.diff,.doc,.docx,.dot,.eml,.epub,.es,.h,.hs,.htm,.html,.hwp,.hwpx,.ics,.ifb,.java,.js,.json,.keynote,.ksh,.ltx,.mail,.markdown,.md,.mht,.mhtml,.mjs,.msg,.nws,.odp,.ods,.odt,.otp,.ots,.pages,.patch,.pdf,.pl,.pm,.pot,.potm,.potx,.ppa,.pps,.ppsm,.ppsx,.ppt,.pptm,.pptx,.pwz,.py,.rst,.rtf,.scala,.sh,.shtml,.srt,.sty,.svg,.svgz,.tex,.text,.tsv,.txt,.vcf,.vtt,.wiz,.xla,.xlb,.xlc,.xlm,.xls,.xlsx,.xlt,.xlw,.xml,.yaml,.yml" />
             <span aria-hidden="true">+</span>
@@ -48,7 +62,7 @@
           </button>
         </div>
       </form>
-      <p class="footer-note">Your API key stays on your computer in <code>.env</code>.</p>
+      <p class="footer-note">Your provider keys stay on your computer in <code>.env</code>.</p>
     </main>
     <script type="module" src="/app.js"></script>
   </body>
