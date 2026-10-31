@@ -31,7 +31,7 @@ A tiny local chat app: choose an OpenAI or Claude model for each message, option
 ## Notes
 
 - Provider keys are read only by `server.js`; they are not exposed to the browser and `.env` is ignored by Git.
-- OpenAI and Anthropic requests go directly to each provider's API.
+- OpenAI and Anthropic requests go directly to each provider's API, unless `AICR_GATEWAY_KEY` is set in `.env`, in which case both are routed through the AI Cost Review gateway for usage monitoring.
 - The model picker can switch between OpenAI and Claude per message. The conversation remains in the browser tab, so either provider can use the previous text turns as context.
 - OpenAI uses the Responses API and accepts supported documents, spreadsheets, presentations, PDFs, and text/code files. Claude accepts PDFs and text/code files; convert other document formats to PDF or text before selecting Claude.
 - OpenAI uploads are deleted after each response. Each request supports up to five files totaling 50 MB.
