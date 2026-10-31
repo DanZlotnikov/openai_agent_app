@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A simple local chat with OpenAI and optional file uploads." />
+    <title>OpenAI File Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="OpenAI File Chat home">
+          <span class="brand-mark">✦</span>
+          <span>OpenAI File Chat</span>
+        </a>
+        <button class="clear-button" id="clear-button" type="button">Clear chat</button>
+      </header>
+
+      <section class="chat" id="chat" aria-live="polite">
+        <div class="empty-state" id="empty-state">
+          <div class="sparkle">✦</div>
+          <h1>Ask anything. Add a file if it helps.</h1>
+          <p>Your messages and optional attachments go directly to OpenAI from this local app.</p>
+        </div>
+      </section>
+
+      <form class="composer" id="chat-form">
+        <div class="attachments" id="attachments" aria-live="polite"></div>
+        <label class="message-label" for="message">Message</label>
+        <textarea id="message" name="message" placeholder="What would you like to know?" rows="1"></textarea>
+        <div class="composer-footer">
+          <label class="attach-button" for="files" title="Add files">
+            <input id="files" type="file" multiple />
+            <span aria-hidden="true">+</span>
+            <span>Attach</span>
+          </label>
+          <span class="file-hint">Up to 5 files · 50 MB total</span>
+          <button class="send-button" id="send-button" type="submit">
+            <span>Send</span><span aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </form>
+      <p class="footer-note">Your API key stays on your computer in <code>.env</code>.</p>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
