@@ -95,7 +95,11 @@ app.post("/api/chat", upload.array("files", maxFiles), async (req, res) => {
     const text = response.output_text?.trim() || "I could not generate a text response.";
     return res.json({ text });
   } catch (error) {
-    console.error("OpenAI request failed:", error);
+    console.error("OpenAI request failed:", {
+      status: Number(error?.status) || 500,
+      requestId: error?.requestID,
+      message: error?.message,
+    });
     const status = Number(error?.status) || 500;
     const message = status === 401
       ? "Your OpenAI API key was rejected. Check OPENAI_API_KEY in .env."
