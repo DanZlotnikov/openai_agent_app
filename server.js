@@ -39,6 +39,11 @@ app.post("/api/chat", upload.array("files", maxFiles), async (req, res) => {
       error: "OPENAI_API_KEY is missing. Add it to your .env file, then restart the server.",
     });
   }
+  if (!process.env.AICR_GATEWAY_KEY) {
+    return res.status(503).json({
+      error: "AICR_GATEWAY_KEY is missing. Add it to your .env file, then restart the server.",
+    });
+  }
 
   const files = req.files || [];
   const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
@@ -63,7 +68,11 @@ app.post("/api/chat", upload.array("files", maxFiles), async (req, res) => {
     return res.status(400).json({ error: "The chat history could not be read." });
   }
 
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const client = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+    baseURL: "https://gateway.danzlotnikov.com/openai/v1",
+    defaultHeaders: { "x-aicr-key": process.env.AICR_GATEWAY_KEY },
+  });
   const uploadedFileIds = [];
 
   try {
