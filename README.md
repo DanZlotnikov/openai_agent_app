@@ -11,11 +11,10 @@ A tiny local chat app: choose an OpenAI or Claude model for each message, option
    npm install
    ```
 
-3. Copy `.env.example` to `.env` and add your OpenAI API key and AICR gateway key:
+3. Copy `.env.example` to `.env` and add your provider API keys:
 
    ```env
    OPENAI_API_KEY=your_key_here
-   AICR_GATEWAY_KEY=your_gateway_key_here
    ANTHROPIC_API_KEY=your_anthropic_key_here
    ```
 
@@ -32,7 +31,7 @@ A tiny local chat app: choose an OpenAI or Claude model for each message, option
 ## Notes
 
 - Provider keys are read only by `server.js`; they are not exposed to the browser and `.env` is ignored by Git.
-- The server routes requests through `https://gateway.danzlotnikov.com/openai/v1`; the AICR gateway key stays server-side in `.env`.
+- OpenAI requests go directly to the official OpenAI API using `OPENAI_API_KEY`.
 - The model picker can switch between OpenAI and Claude per message. The conversation remains in the browser tab, so either provider can use the previous text turns as context.
 - OpenAI uses the Responses API and accepts supported documents, spreadsheets, presentations, PDFs, and text/code files. Claude accepts PDFs and text/code files; convert other document formats to PDF or text before selecting Claude.
 - OpenAI uploads are deleted after each response. Each request supports up to five files totaling 50 MB.
