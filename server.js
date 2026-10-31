@@ -2,12 +2,16 @@ import "dotenv/config";
 import express from "express";
 import multer from "multer";
 import OpenAI from "openai";
+import path from "node:path";
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
 const model = process.env.OPENAI_MODEL || "gpt-4.1-mini";
 const maxFiles = 5;
 const maxTotalBytes = 50 * 1024 * 1024;
+const supportedExtensions = new Set([
+  ".art", ".bat", ".brf", ".c", ".cls", ".css", ".csv", ".diff", ".doc", ".docx", ".dot", ".eml", ".epub", ".es", ".h", ".hs", ".htm", ".html", ".hwp", ".hwpx", ".ics", ".ifb", ".java", ".js", ".json", ".keynote", ".ksh", ".ltx", ".mail", ".markdown", ".md", ".mht", ".mhtml", ".mjs", ".msg", ".nws", ".odp", ".ods", ".odt", ".otp", ".ots", ".pages", ".patch", ".pdf", ".pl", ".pm", ".pot", ".potm", ".potx", ".ppa", ".pps", ".ppsm", ".ppsx", ".ppt", ".pptm", ".pptx", ".pwz", ".py", ".rst", ".rtf", ".scala", ".sh", ".shtml", ".srt", ".sty", ".svg", ".svgz", ".tex", ".text", ".tsv", ".txt", ".vcf", ".vtt", ".wiz", ".xla", ".xlb", ".xlc", ".xlm", ".xls", ".xlsx", ".xlt", ".xlw", ".xml", ".yaml", ".yml",
+]);
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -39,12 +43,17 @@ app.post("/api/chat", upload.array("files", maxFiles), async (req, res) => {
   const files = req.files || [];
   const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
   const message = String(req.body.message || "").trim();
+  const unsupportedFiles = files.filter((file) => !supportedExtensions.has(path.extname(file.originalname).toLowerCase()));
 
   if (!message && files.length === 0) {
     return res.status(400).json({ error: "Write a message or attach at least one file." });
   }
   if (totalBytes > maxTotalBytes) {
     return res.status(413).json({ error: "Attached files must total 50 MB or less." });
+  }
+  if (unsupportedFiles.length) {
+    const names = unsupportedFiles.map((file) => file.originalname).join(", ");
+    return res.status(400).json({ error: `Unsupported file type: ${names}. Please attach a PDF, document, spreadsheet, presentation, or supported text/code file.` });
   }
 
   let history;
@@ -95,7 +104,7 @@ app.post("/api/chat", upload.array("files", maxFiles), async (req, res) => {
         : error?.message || "Something went wrong while contacting OpenAI.";
     return res.status(status >= 400 && status < 600 ? status : 500).json({ error: message });
   } finally {
-    await Promise.allSettled(uploadedFileIds.map((id) => client.files.del(id)));
+    await Promise.allSettled(uploadedFileIds.map((id) => client.files.delete(id)));
   }
 });
 

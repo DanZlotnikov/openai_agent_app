@@ -30,6 +30,6 @@ A tiny local chat app: type a prompt, optionally attach up to five files, and re
 ## Notes
 
 - The API key is read only by `server.js`; it is not exposed to the browser and `.env` is ignored by Git.
-- The app uses the OpenAI Responses API so it can accept document, spreadsheet, text/code, and PDF attachments. Each request supports up to five files totaling 50 MB.
+- The app uses the OpenAI Responses API so it can accept supported document, spreadsheet, text/code, presentation, and PDF attachments. Each request supports up to five files totaling 50 MB.
 - Uploaded files are deleted from the OpenAI Files API after each response. Conversation text stays in this browser tab only.
 - Set `OPENAI_MODEL` in `.env` if you want to use a different model available to your project.
